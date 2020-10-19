@@ -13,11 +13,11 @@ class MyLocalizations {
 
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
-      'main.title': 'Oranda',
+      'main.title': 'Orangda',
 
     },
     'zh': {
-      'main.title': '合拍世界',
+      'main.title': 'Orangda',
     }
   };
 

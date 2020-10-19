@@ -1,5 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_photo_share/ui/demo/custom_scroll_view_demo.dart';
+import 'package:flutter_photo_share/ui/demo/random_size_demo.dart';
+import 'package:flutter_photo_share/ui/demo/variable_size_demo.dart';
 import 'feed.dart';
 import 'upload_page.dart';
 import 'dart:async';
@@ -35,7 +40,7 @@ Future<void> main() async {
   AccountService.init();
   auth = AccountService.firebaseAuth();
   googleSignIn = AccountService.googleSignIn();
-  runApp(Fluttergram());
+  runApp(Orangda());
 }
 
 Future<Null> _ensureLoggedIn(BuildContext context) async {
@@ -168,12 +173,12 @@ Future<void> tryCreateUserRecord(BuildContext context) async {
   return null;
 }
 
-class Fluttergram extends StatelessWidget {
+class Orangda extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fluttergram',
+      title: 'Orangda',
       theme: ThemeData(
           // This is the theme of your application.
           //
@@ -183,10 +188,9 @@ class Fluttergram extends StatelessWidget {
           // "hot reload" (press "r" in the console where you ran "flutter run",
           // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
           // counter didn't reset back to zero; the application is not restarted.
-          primarySwatch: Colors.blue,
           buttonColor: Colors.pink,
           primaryIconTheme: IconThemeData(color: Colors.black)),
-      home: HomePage(title: 'Fluttergram'),
+      home: HomePage(title: 'Orangda'),
     );
   }
 }
@@ -208,13 +212,13 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold buildLoginPage() {
     return Scaffold(
-      body: Center(
+      body: Container(
         child: Padding(
           padding: const EdgeInsets.only(top: 240.0),
           child: Column(
             children: <Widget>[
               Text(
-                'Fluttergram',
+                'Orangda',
                 style: TextStyle(
                     fontSize: 60.0,
                     fontFamily: "Billabong",
@@ -232,6 +236,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+
     );
   }
 
@@ -248,19 +253,20 @@ class _HomePageState extends State<HomePage> {
     return (googleSignIn.currentUser == null || currentUserModel == null)
         ? buildLoginPage()
         : Scaffold(
-            body: PageView(
+            body: Container(
+              child:PageView(
               children: [
                 Container(
-                  color: Colors.white,
+                  color: Colors.red,
                   child: Feed(),
                 ),
-                Container(color: Colors.white, child: SearchPage()),
+                Container(color: Colors.white, child: VariableSizedDemo()),
                 Container(
                   color: Colors.white,
                   child: Uploader(),
                 ),
                 Container(
-                    color: Colors.white, child: ActivityFeedPage()),
+                    color: Colors.white, child: CustomScrollviewDemo()),
                 Container(
                     color: Colors.white,
                     child: ProfilePage(
@@ -270,6 +276,7 @@ class _HomePageState extends State<HomePage> {
               controller: pageController,
               physics: NeverScrollableScrollPhysics(),
               onPageChanged: onPageChanged,
+            ),
             ),
             bottomNavigationBar: CupertinoTabBar(
               backgroundColor: Colors.white,

@@ -135,6 +135,7 @@ class _Uploader extends State<Uploader> {
   }
 
   _selectImage(BuildContext parentContext) async {
+    final _picker = ImagePicker();
     return showDialog<Null>(
       context: parentContext,
       barrierDismissible: false, // user must tap button!
@@ -147,20 +148,21 @@ class _Uploader extends State<Uploader> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  File imageFile =
-                      await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
+                  PickedFile pickedFile =
+                      await _picker.getImage(source: ImageSource.camera, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
                   setState(() {
-                    file = imageFile;
+                    file = File(pickedFile.path);
                   });
                 }),
             SimpleDialogOption(
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  File imageFile =
-                      await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
+                  PickedFile pickedFile =
+                      await _picker.getImage(source: ImageSource.gallery, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
                   setState(() {
-                    file = imageFile;
+                    file = File(pickedFile.path);
+                    ;
                   });
                 }),
             SimpleDialogOption(
