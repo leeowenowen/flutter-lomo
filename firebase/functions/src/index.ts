@@ -4,7 +4,7 @@ import { notificationHandlerModule } from "./notificationHandler"
 import { getFeedModule } from "./getFeed"
 admin.initializeApp();
 
-export const notificationHandler = functions.firestore.document("/insta_a_feed/{userId}/items/{activityFeedItem}")
+export const notificationHandler = functions.firestore.document("/feeds/{userId}/items/{activityFeedItem}")
     .onCreate(async (snapshot, context) => {
        await notificationHandlerModule(snapshot, context);
     });

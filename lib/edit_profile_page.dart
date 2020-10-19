@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service/account_service.dart';
@@ -29,7 +30,7 @@ class EditProfilePage extends StatelessWidget {
 
   applyChanges() {
     Firestore.instance
-        .collection('insta_users')
+        .collection(Constants.COLLECTION_USER)
         .document(AccountService.currentUser().id)
         .updateData({
       "displayName": nameController.text,
@@ -62,7 +63,7 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Firestore.instance
-            .collection('insta_users')
+            .collection(Constants.COLLECTION_USER)
             .document(AccountService.currentUser().id)
             .get(),
         builder: (context, snapshot) {

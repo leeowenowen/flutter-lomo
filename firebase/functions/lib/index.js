@@ -13,7 +13,7 @@ const admin = require("firebase-admin");
 const notificationHandler_1 = require("./notificationHandler");
 const getFeed_1 = require("./getFeed");
 admin.initializeApp();
-exports.notificationHandler = functions.firestore.document("/insta_a_feed/{userId}/items/{activityFeedItem}")
+exports.notificationHandler = functions.firestore.document("/feeds/{userId}/items/{activityFeedItem}")
     .onCreate((snapshot, context) => __awaiter(this, void 0, void 0, function* () {
     yield notificationHandler_1.notificationHandlerModule(snapshot, context);
 }));

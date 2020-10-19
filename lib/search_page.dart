@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'dart:async';
 import "profile_page.dart"; // needed to import for openProfile function
 import 'models/user.dart';
@@ -39,7 +40,7 @@ class _SearchPage extends State<SearchPage> with AutomaticKeepAliveClientMixin<S
 
   void submit(String searchValue) async {
     Future<QuerySnapshot> users = Firestore.instance
-        .collection("insta_users")
+        .collection(Constants.COLLECTION_USER)
         .where('displayName', isGreaterThanOrEqualTo: searchValue)
         .getDocuments();
 

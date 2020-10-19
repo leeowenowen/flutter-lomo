@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
+import 'package:flutter_photo_share/common/utils/font_util.dart';
 import 'package:flutter_photo_share/ui/demo/custom_scroll_view_demo.dart';
 import 'package:flutter_photo_share/ui/demo/random_size_demo.dart';
 import 'package:flutter_photo_share/ui/demo/variable_size_demo.dart';
@@ -20,9 +22,8 @@ import 'dart:io' show Platform;
 import 'models/user.dart';
 import 'service/account_service.dart';
 
-FirebaseAuth auth ;
-GoogleSignIn googleSignIn;
-final ref = Firestore.instance.collection('insta_users');
+
+final ref = Firestore.instance.collection(Constants.COLLECTION_USER);
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
 
@@ -38,61 +39,10 @@ Future<void> main() async {
     onError: (_) => print('[Main] Error setting timestamps in snapshots')
   );
   AccountService.init();
-  auth = AccountService.firebaseAuth();
-  googleSignIn = AccountService.googleSignIn();
   runApp(Orangda());
 }
 
-Future<Null> _ensureLoggedIn(BuildContext context) async {
-  GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null) {
-    user = await googleSignIn.signInSilently();
-  }
-  if (user == null) {
-    await googleSignIn.signIn();
-    await tryCreateUserRecord(context);
-  }
 
-  if (await auth.currentUser() == null) {
-
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
-
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    await auth.signInWithCredential(credential);
-  }
-}
-
-Future<Null> _silentLogin(BuildContext context) async {
-  GoogleSignInAccount user = googleSignIn.currentUser;
-
-  if (user == null) {
-    user = await googleSignIn.signInSilently();
-    await tryCreateUserRecord(context);
-  }
-
-  if (await auth.currentUser() == null && user != null) {
-    final GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
-
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    await auth.signInWithCredential(credential);
-  }
-
-
-}
 
 Future<Null> _setUpNotifications() async {
   if (Platform.isAndroid) {
@@ -112,65 +62,11 @@ Future<Null> _setUpNotifications() async {
       print("Firebase Messaging Token: " + token);
 
       Firestore.instance
-          .collection("insta_users")
+          .collection(Constants.COLLECTION_USER)
           .document(currentUserModel.id)
           .updateData({"androidNotificationToken": token});
     });
   }
-}
-
-Future<void> tryCreateUserRecord(BuildContext context) async {
-  GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null) {
-    return null;
-  }
-  DocumentSnapshot userRecord = await ref.document(user.id).get();
-  if (userRecord.data == null) {
-    // no user record exists, time to create
-
-    String userName = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Center(
-                child: Scaffold(
-                    appBar: AppBar(
-                      leading: Container(),
-                      title: Text('Fill out missing data',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)),
-                      backgroundColor: Colors.white,
-                    ),
-                    body: ListView(
-                      children: <Widget>[
-                        Container(
-                          child: CreateAccount(),
-                        ),
-                      ],
-                    )),
-              )),
-    );
-
-    if (userName != null || userName.length != 0) {
-      ref.document(user.id).setData({
-        "id": user.id,
-        "username": userName,
-        "photoUrl": user.photoUrl,
-        "email": user.email,
-        "displayName": user.displayName,
-        "bio": "",
-        "followers": {},
-        "following": {},
-      });
-    }
-    userRecord = await ref.document(user.id).get();
-  }
-
-
-  User currentUser = User.fromDocument(userRecord);
-  AccountService.setCurrentUser(currentUser);
-  currentUserModel = currentUser;
-  return null;
 }
 
 class Orangda extends StatelessWidget {
@@ -212,18 +108,12 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold buildLoginPage() {
     return Scaffold(
-      body: Container(
+      body: Container(child:Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 240.0),
           child: Column(
             children: <Widget>[
-              Text(
-                'Orangda',
-                style: TextStyle(
-                    fontSize: 60.0,
-                    fontFamily: "Billabong",
-                    color: Colors.black),
-              ),
+              FontUtil.makeBrand(),
               Padding(padding: const EdgeInsets.only(bottom: 100.0)),
               GestureDetector(
                 onTap: login,
@@ -235,6 +125,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+      ),
       ),
 
     );
@@ -250,9 +141,9 @@ class _HomePageState extends State<HomePage> {
       setUpNotifications();
     }
 
-    return (googleSignIn.currentUser == null || currentUserModel == null)
+    return (AccountService.googleSignIn().currentUser == null || currentUserModel == null)
         ? buildLoginPage()
-        : Scaffold(
+        :Scaffold(
             body: Container(
               child:PageView(
               children: [
@@ -269,9 +160,10 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white, child: CustomScrollviewDemo()),
                 Container(
                     color: Colors.white,
-                    child: ProfilePage(
-                      userId: googleSignIn.currentUser.id,
-                    )),
+                    child:ProfilePage(
+                      userId: AccountService.googleSignIn().currentUser.id,
+                    ),
+                )
               ],
               controller: pageController,
               physics: NeverScrollableScrollPhysics(),
@@ -314,7 +206,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void login() async {
-    await _ensureLoggedIn(context);
+    await AccountService.ensureLoggedIn(context);
     setState(() {
       triedSilentLogin = true;
     });
@@ -328,7 +220,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void silentLogin(BuildContext context) async {
-    await _silentLogin(context);
+    await AccountService.silentLogin(context);
     setState(() {
       triedSilentLogin = true;
     });

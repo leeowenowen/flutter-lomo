@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const admin = require("firebase-admin");
+//import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 exports.notificationHandlerModule = function (snapshot, context) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(snapshot.data());
-        const ownerDoc = admin.firestore().doc("insta_users/" + context.params.userId);
+        const ownerDoc = admin.firestore().doc("users/" + context.params.userId);
         const ownerData = yield ownerDoc.get();
         const androidNotificationToken = ownerData.data()["androidNotificationToken"];
         if (androidNotificationToken) {

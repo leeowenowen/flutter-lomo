@@ -41,7 +41,7 @@ dependencies:
   shared_preferences: ^0.5.8
   package_info: ^0.4.3
   cloud_firestore: ^0.13.0+1
-  image_picker: ^0.6.2+3
+  image_picker: ^0.6.7+12
   firebase_storage: ^3.1.1
   firebase_auth: ^0.15.3
   google_sign_in: ^4.1.1
@@ -74,6 +74,9 @@ flutter:
     - family: Billabong
       fonts:
         - asset: assets/fonts/Billabong.ttf
+    - family: Fontdiner Swanky
+      fonts:
+        - asset: assets/fonts/FontdinerSwanky.ttf
   assets:
     - assets/
     - assets/images/google_signin_button.png

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
@@ -98,7 +99,7 @@ class _ImagePost extends State<ImagePost> {
     fontWeight: FontWeight.bold,
   );
 
-  var reference = Firestore.instance.collection('insta_posts');
+  var reference = Firestore.instance.collection(Constants.COLLECTION_POSTS);
 
   _ImagePost(
       {this.mediaUrl,
@@ -169,7 +170,7 @@ class _ImagePost extends State<ImagePost> {
 
     return FutureBuilder(
         future: Firestore.instance
-            .collection('insta_users')
+            .collection(Constants.COLLECTION_USER)
             .document(ownerId)
             .get(),
         builder: (context, snapshot) {
@@ -300,7 +301,7 @@ class _ImagePost extends State<ImagePost> {
   void addActivityFeedItem() {
     User currentUserModel = AccountService.currentUser();
     Firestore.instance
-        .collection("insta_a_feed")
+        .collection(Constants.COLLECTION_FEED)
         .document(ownerId)
         .collection("items")
         .document(postId)
@@ -317,7 +318,7 @@ class _ImagePost extends State<ImagePost> {
 
   void removeActivityFeedItem() {
     Firestore.instance
-        .collection("insta_a_feed")
+        .collection(Constants.COLLECTION_FEED)
         .document(ownerId)
         .collection("items")
         .document(postId)
@@ -332,7 +333,7 @@ class ImagePostFromId extends StatelessWidget {
 
   getImagePost() async {
     var document =
-        await Firestore.instance.collection('insta_posts').document(id).get();
+        await Firestore.instance.collection(Constants.COLLECTION_POSTS).document(id).get();
     return ImagePost.fromDocument(document);
   }
 

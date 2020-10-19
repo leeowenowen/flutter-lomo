@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
 import 'main2.dart';
 import 'image_post.dart';
@@ -75,12 +76,12 @@ class _ProfilePage extends State<ProfilePage>
       followButtonClicked = true;
     });
 
-    Firestore.instance.document("insta_users/$profileId").updateData({
+    Firestore.instance.document(Constants.COLLECTION_USER+ "/$profileId").updateData({
       'followers.$currentUserId': true
       //firestore plugin doesnt support deleting, so it must be nulled / falsed
     });
 
-    Firestore.instance.document("insta_users/$currentUserId").updateData({
+    Firestore.instance.document(Constants.COLLECTION_USER+"/$currentUserId").updateData({
       'following.$profileId': true
       //firestore plugin doesnt support deleting, so it must be nulled / falsed
     });
@@ -88,7 +89,7 @@ class _ProfilePage extends State<ProfilePage>
     //updates activity feed
     User currentUserModel = AccountService.currentUser();
     Firestore.instance
-        .collection("insta_a_feed")
+        .collection( Constants.COLLECTION_FEED)
         .document(profileId)
         .collection("items")
         .document(currentUserId)
@@ -108,18 +109,18 @@ class _ProfilePage extends State<ProfilePage>
       followButtonClicked = true;
     });
 
-    Firestore.instance.document("insta_users/$profileId").updateData({
+    Firestore.instance.document(Constants.COLLECTION_USER+"/$profileId").updateData({
       'followers.$currentUserId': false
       //firestore plugin doesnt support deleting, so it must be nulled / falsed
     });
 
-    Firestore.instance.document("insta_users/$currentUserId").updateData({
+    Firestore.instance.document(Constants.COLLECTION_USER+"/$currentUserId").updateData({
       'following.$profileId': false
       //firestore plugin doesnt support deleting, so it must be nulled / falsed
     });
 
     Firestore.instance
-        .collection("insta_a_feed")
+        .collection(Constants.COLLECTION_FEED)
         .document(profileId)
         .collection("items")
         .document(currentUserId)
@@ -250,7 +251,7 @@ class _ProfilePage extends State<ProfilePage>
       Future<List<ImagePost>> getPosts() async {
         List<ImagePost> posts = [];
         var snap = await Firestore.instance
-            .collection('insta_posts')
+            .collection(Constants.COLLECTION_POSTS)
             .where('ownerId', isEqualTo: profileId)
             .orderBy("timestamp")
             .getDocuments();
@@ -292,13 +293,14 @@ class _ProfilePage extends State<ProfilePage>
               return imagePost;
             }).toList());
           }
+          return Container();
         },
       ));
     }
 
     return StreamBuilder(
         stream: Firestore.instance
-            .collection('insta_users')
+            .collection(Constants.COLLECTION_USER)
             .document(profileId)
             .snapshots(),
         builder: (context, snapshot) {

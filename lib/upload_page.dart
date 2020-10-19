@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -279,7 +280,7 @@ Future<String> uploadImage(var imageFile) async {
 
 void postToFireStore(
     {String mediaUrl, String location, String description}) async {
-  var reference = Firestore.instance.collection('insta_posts');
+  var reference = Firestore.instance.collection(Constants.COLLECTION_POSTS);
   User currentUserModel = AccountService.currentUser();
   GoogleSignIn googleSignIn = AccountService.googleSignIn();
   reference.add({

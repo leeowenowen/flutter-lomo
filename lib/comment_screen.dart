@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
 import "dart:async";
 import 'models/user.dart';
 import 'service/account_service.dart';
@@ -92,7 +93,7 @@ class _CommentScreenState extends State<CommentScreen> {
     List<Comment> comments = [];
 
     QuerySnapshot data = await Firestore.instance
-        .collection("insta_comments")
+        .collection(Constants.COLLECTION_COMMENT)
         .document(postId)
         .collection("comments")
         .getDocuments();
@@ -106,7 +107,7 @@ class _CommentScreenState extends State<CommentScreen> {
     User currentUserModel = AccountService.currentUser();
     _commentController.clear();
     Firestore.instance
-        .collection("insta_comments")
+        .collection(Constants.COLLECTION_COMMENT)
         .document(postId)
         .collection("comments")
         .add({
@@ -119,7 +120,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
     //adds to postOwner's activity feed
     Firestore.instance
-        .collection("insta_a_feed")
+        .collection(Constants.COLLECTION_FEED)
         .document(postOwner)
         .collection("items")
         .add({

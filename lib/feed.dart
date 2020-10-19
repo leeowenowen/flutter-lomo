@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_photo_share/common/utils/font_util.dart';
 import 'image_post.dart';
 import 'dart:async';
 import 'dart:io';
@@ -37,22 +38,7 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
 
     return Scaffold(
       appBar: AppBar(
-        title:
-        RichText(
-            text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: 'Orange',
-                      style: const TextStyle(
-                          fontFamily: "Billabong", color: Colors.deepOrange, fontSize: 35.0)),
-                  TextSpan(
-                      text: 'da',
-                      style: const TextStyle(
-                          fontFamily: "Billabong", color: Colors.black, fontSize: 35.0)),
-                ])),
-        // const Text('Orangda',
-        //     style: const TextStyle(
-        //         fontFamily: "Billabong", color: Colors.black, fontSize: 35.0)),
+        title: FontUtil.makeTitle(),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -91,10 +77,12 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
     print("Staring getFeed");
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String userId = AccountService.googleSignIn().currentUser.id.toString();
-    var url =
-        'https://us-central1-orange-86885.cloudfunctions.net/getFeed?uid=' + userId;
-        // 'https://us-central1-mp-rps.cloudfunctions.net/getFeed?uid=' + userId;
+    // load all feeds , so do not need user id now
+    // String userId = AccountService.googleSignIn().currentUser.id.toString();
+    // var url = 'https://us-central1-orange-86885.cloudfunctions.net/getFeed?uid=' + userId;
+    String userId = '';
+    var url = 'https://us-central1-orange-86885.cloudfunctions.net/getFeed';
+
     var httpClient = HttpClient();
 
     List<ImagePost> listOfPosts;

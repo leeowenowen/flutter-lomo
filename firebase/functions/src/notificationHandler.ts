@@ -1,10 +1,10 @@
 import * as admin from 'firebase-admin';
-import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
+//import { DocumentSnapshot } from 'firebase-functions/lib/providers/firestore';
 
 export const notificationHandlerModule = async function (snapshot, context) {      
       console.log(snapshot.data())
 
-      const ownerDoc = admin.firestore().doc("insta_users/" + context.params.userId)
+      const ownerDoc = admin.firestore().doc("users/" + context.params.userId)
       const ownerData = await ownerDoc.get()
 
 
