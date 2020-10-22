@@ -172,7 +172,7 @@ class _ProfilePage extends State<ProfilePage>
               child: Text(text,
                   style: TextStyle(
                       color: textColor, fontWeight: FontWeight.bold)),
-              width: 250.0,
+              width: 220.0,
               height: 27.0,
             )),
       );
@@ -321,11 +321,13 @@ class _ProfilePage extends State<ProfilePage>
               appBar: AppBar(
                 title: Text(
                   user.username,
-                  style: const TextStyle(color: Colors.black),
+                  style: const TextStyle(
+                      fontFamily: "Fontdiner Swanky", color: Colors.black, fontSize: 20),
                 ),
                 backgroundColor: Colors.white,
               ),
-              body: ListView(
+              body: Container(
+                child:ListView(
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -385,7 +387,9 @@ class _ProfilePage extends State<ProfilePage>
                   Divider(height: 0.0),
                   buildUserPosts(),
                 ],
-              ));
+              ),
+              ),
+          );
         });
   }
 

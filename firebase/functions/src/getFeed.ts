@@ -77,7 +77,7 @@ function getFollowing(uid, res){
 */
 function getAllPosts(res){
     const posts = admin.firestore().collection("posts")
-.orderBy("timestamp")
+.orderBy("timestamp", "asc")
 
     return posts.get()
     .then(function(querySnapshot) {
