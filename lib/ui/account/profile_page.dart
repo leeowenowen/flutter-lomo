@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
-import 'main2.dart';
-import 'image_post.dart';
+import 'package:flutter_photo_share/ui/widgets/image_post.dart';
 import 'dart:async';
 import 'edit_profile_page.dart';
-import 'models/user.dart';
+import '../../models/user.dart';
 
 class ProfilePage extends StatefulWidget {
+  static final String ROUTE = 'profile_page';
   const ProfilePage({this.userId});
 
   final String userId;

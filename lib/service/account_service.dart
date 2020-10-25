@@ -1,20 +1,20 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_photo_share/common/utils/notification_util.dart';
 import 'package:flutter_photo_share/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../create_account.dart';
 import '../main.dart';
+import '../ui/account/set_account_info_page.dart';
 
 class AccountService {
   static FirebaseAuth _auth;
   static GoogleSignIn _googleSignIn;
- static User _currentUserModel;
+  static User _currentUserModel;
 
-  static init(){
+  static init() {
     _auth = FirebaseAuth.instance;
     _googleSignIn = GoogleSignIn();
   }
@@ -23,15 +23,15 @@ class AccountService {
     return _auth;
   }
 
-  static GoogleSignIn googleSignIn(){
+  static GoogleSignIn googleSignIn() {
     return _googleSignIn;
   }
 
-  static setCurrentUser(User user){
+  static setCurrentUser(User user) {
     _currentUserModel = user;
   }
 
-  static User currentUser(){
+  static User currentUser() {
     return _currentUserModel;
   }
 
@@ -41,7 +41,7 @@ class AccountService {
     _currentUserModel = null;
   }
 
- static  Future<Null> ensureLoggedIn(BuildContext context) async {
+  static Future<Null> ensureLoggedIn(BuildContext context) async {
     GoogleSignInAccount user = _googleSignIn.currentUser;
     if (user == null) {
       user = await _googleSignIn.signInSilently();
@@ -52,11 +52,9 @@ class AccountService {
     }
 
     if (await _auth.currentUser() == null) {
-
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser
-          .authentication;
-
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
@@ -64,6 +62,7 @@ class AccountService {
       );
 
       await _auth.signInWithCredential(credential);
+      NotificationUtil.setUpNotifications();
     }
   }
 
@@ -77,9 +76,8 @@ class AccountService {
 
     if (await _auth.currentUser() == null && user != null) {
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleAuth = await googleUser
-          .authentication;
-
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.getCredential(
         accessToken: googleAuth.accessToken,
@@ -88,7 +86,6 @@ class AccountService {
 
       await _auth.signInWithCredential(credential);
     }
-
   }
 
   static Future<void> tryCreateUserRecord(BuildContext context) async {
@@ -100,27 +97,8 @@ class AccountService {
     if (userRecord.data == null) {
       // no user record exists, time to create
 
-      String userName = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Center(
-              child: Scaffold(
-                  appBar: AppBar(
-                    leading: Container(),
-                    title: Text('Fill out missing data',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold)),
-                    backgroundColor: Colors.white,
-                  ),
-                  body: ListView(
-                    children: <Widget>[
-                      Container(
-                        child: CreateAccount(),
-                      ),
-                    ],
-                  )),
-            )),
+      String userName = await Navigator.of(context).pushNamed(
+        SetAccountInfoPage.ROUTE,
       );
 
       if (userName != null || userName.length != 0) {
@@ -137,7 +115,6 @@ class AccountService {
       }
       userRecord = await ref.document(user.id).get();
     }
-
 
     User currentUser = User.fromDocument(userRecord);
     AccountService.setCurrentUser(currentUser);

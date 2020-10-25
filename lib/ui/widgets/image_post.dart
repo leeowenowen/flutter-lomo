@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_photo_share/common/constants/constants.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
-import 'models/user.dart';
-import 'profile_page.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'comment_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'service/account_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_photo_share/common/constants/constants.dart';
+import 'package:flutter_photo_share/models/user.dart';
+import 'package:flutter_photo_share/service/account_service.dart';
+import 'package:flutter_photo_share/ui/account/profile_page.dart';
+import 'package:flutter_photo_share/ui/comment/comment_page.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ImagePost extends StatefulWidget {
   const ImagePost(
@@ -150,9 +150,10 @@ class _ImagePost extends State<ImagePost> {
                   child: Container(
                     width: 100,
                     height: 100,
-                    child:  Opacity(
+                    child: Opacity(
                         opacity: 0.85,
-                        child: FlareActor("assets/flare/Like.flr",
+                        child: FlareActor(
+                          "assets/flare/Like.flr",
                           animation: "Like",
                         )),
                   ),
@@ -174,26 +175,33 @@ class _ImagePost extends State<ImagePost> {
             .document(ownerId)
             .get(),
         builder: (context, snapshot) {
-
           if (snapshot.data != null) {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(snapshot.data.data['photoUrl']),
-                backgroundColor: Colors.grey,
+            return Container(
+              height: 70,
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: CachedNetworkImageProvider(
+                      snapshot.data.data['photoUrl']),
+                  backgroundColor: Colors.grey,
+                ),
+                title: GestureDetector(
+                  child: Text(snapshot.data.data['username'], style: boldStyle),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ProfilePage.ROUTE, arguments: {
+                      'userId':ownerId
+                    });
+                  },
+                ),
+                subtitle: Text(this.location),
+                trailing: const Icon(Icons.more_vert),
               ),
-              title: GestureDetector(
-                child: Text(snapshot.data.data['username'], style: boldStyle),
-                onTap: () {
-                  openProfile(context, ownerId);
-                },
-              ),
-              subtitle: Text(this.location),
-              trailing: const Icon(Icons.more_vert),
             );
           }
 
           // snapshot data is null here
-          return Container();
+          return Container(
+            height: 70,
+          );
         });
   }
 
@@ -204,7 +212,8 @@ class _ImagePost extends State<ImagePost> {
 
   @override
   Widget build(BuildContext context) {
-    liked = (likes[AccountService.googleSignIn().currentUser.id.toString()] == true);
+    liked = (likes[AccountService.googleSignIn().currentUser.id.toString()] ==
+        true);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -332,8 +341,10 @@ class ImagePostFromId extends StatelessWidget {
   const ImagePostFromId({this.id});
 
   getImagePost() async {
-    var document =
-        await Firestore.instance.collection(Constants.COLLECTION_POSTS).document(id).get();
+    var document = await Firestore.instance
+        .collection(Constants.COLLECTION_POSTS)
+        .document(id)
+        .get();
     return ImagePost.fromDocument(document);
   }
 
@@ -354,12 +365,9 @@ class ImagePostFromId extends StatelessWidget {
 
 void goToComments(
     {BuildContext context, String postId, String ownerId, String mediaUrl}) {
-  Navigator.of(context)
-      .push(MaterialPageRoute<bool>(builder: (BuildContext context) {
-    return CommentScreen(
-      postId: postId,
-      postOwner: ownerId,
-      postMediaUrl: mediaUrl,
-    );
-  }));
+  Navigator.of(context).pushNamed(CommentPage.ROUTE, arguments: {
+    'postId': postId,
+    'postOwner': ownerId,
+    'postMediaUrl': mediaUrl,
+  });
 }

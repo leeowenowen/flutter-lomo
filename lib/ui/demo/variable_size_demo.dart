@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_photo_share/models/tu_chong_repository.dart';
 import 'package:flutter_photo_share/models/tu_chong_source.dart';
-import 'package:flutter_photo_share/widgets/item_builder.dart';
-import 'package:flutter_photo_share/widgets/push_to_refresh_header.dart';
+import 'package:flutter_photo_share/ui/widgets/item_builder.dart';
+import 'package:flutter_photo_share/ui/widgets/push_to_refresh_header.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 

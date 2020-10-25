@@ -1,20 +1,22 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_photo_share/models/tu_chong_repository.dart';
 import 'package:flutter_photo_share/models/tu_chong_source.dart';
-import 'package:flutter_photo_share/widgets/item_builder.dart';
-import 'package:flutter_photo_share/widgets/push_to_refresh_header.dart';
+import 'package:flutter_photo_share/ui/widgets/item_builder.dart';
+import 'package:flutter_photo_share/ui/widgets/push_to_refresh_header.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 
 class KnownSizedDemo extends StatefulWidget {
   static const String ROUTE = 'KnownSizedDemo';
+
   @override
   _KnownSizedDemoState createState() => _KnownSizedDemoState();
 }
+
 class _KnownSizedDemoState extends State<KnownSizedDemo> {
   TuChongRepository listSourceRepository = TuChongRepository();
   DateTime dateTimeNow;
+
   @override
   void dispose() {
     super.dispose();
@@ -32,14 +34,14 @@ class _KnownSizedDemoState extends State<KnownSizedDemo> {
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: PullToRefreshContainer(
-                    (PullToRefreshScrollNotificationInfo info) {
-                  return PullToRefreshHeader(info, dateTimeNow);
-                }),
+                (PullToRefreshScrollNotificationInfo info) {
+              return PullToRefreshHeader(info, dateTimeNow);
+            }),
           ),
           LoadingMoreSliverList<TuChongItem>(
             SliverListConfig<TuChongItem>(
               extendedListDelegate:
-              const SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                  const SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 300,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,

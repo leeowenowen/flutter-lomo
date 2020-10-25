@@ -1,13 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/utils/font_util.dart';
-import 'common/constants/constants.dart';
-import 'image_post.dart';
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'service/account_service.dart';
+import 'package:flutter_photo_share/ui/widgets/image_post.dart';
+
+import '../../common/constants/constants.dart';
 
 class Feed extends StatefulWidget {
   _Feed createState() => _Feed();
@@ -45,9 +43,12 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
         backgroundColor: Colors.white,
       ),
       body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: buildFeed(),
-      ),
+          onRefresh: _refresh,
+          child: Container(
+            width: 200,
+            color: Colors.red,
+            child: buildFeed(),
+          )),
     );
   }
 
@@ -71,9 +72,10 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
     //     feedData = listOfPosts;
     //   });
     // } else {
-      _getFeed();
+    _getFeed();
     // }
   }
+
   Future<List<ImagePost>> getPosts() async {
     List<ImagePost> posts = [];
     var snap = await Firestore.instance
@@ -86,6 +88,7 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
 
     return posts;
   }
+
   _getFeed() async {
     print("Staring getFeed");
     //SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -118,7 +121,7 @@ class _Feed extends State<Feed> with AutomaticKeepAliveClientMixin<Feed> {
     //   result = 'Failed invoking the getFeed function. Exception: $exception';
     // }
     // print(result);
-      List<ImagePost> posts = await getPosts();
+    List<ImagePost> posts = await getPosts();
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String jsonString = json.encode(posts);
     // prefs.setString("feed", jsonString);

@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_photo_share/common/constants/constants.dart';
-import 'models/user.dart';
+import '../../models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'service/account_service.dart';
+import '../../service/account_service.dart';
 
 class EditProfilePage extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();

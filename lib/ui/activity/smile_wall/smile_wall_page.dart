@@ -1,44 +1,47 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_photo_share/models/posts_repository.dart';
-import 'package:flutter_photo_share/widgets/push_to_refresh_header.dart';
+import 'package:flutter_photo_share/ui/widgets/image_post.dart';
+import 'package:flutter_photo_share/ui/widgets/push_to_refresh_header.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 
-import 'common/constants/constants.dart';
-import 'image_post.dart';
+import '../../../common/constants/constants.dart';
 
-class SmileWall extends StatefulWidget{
+class SmileWallPage extends StatefulWidget {
   @override
-  _SmileWallState createState() => _SmileWallState();
-
+  _SmileWallPageState createState() => _SmileWallPageState();
 }
 
-class _SmileWallState extends State<SmileWall>{
+class _SmileWallPageState extends State<SmileWallPage> {
   List<ImagePost> _posts;
   PostRepository listSourceRepository = PostRepository(
     pageCount: 20,
     collection: Constants.COLLECTION_ACTIVITY,
   );
   DateTime dateTimeNow;
+
   @override
   void initState() {
     super.initState();
     _getSmileWallPosts();
   }
+
   @override
   void dispose() {
     super.dispose();
     listSourceRepository.dispose();
   }
+
   Future<bool> onRefresh() {
     return listSourceRepository.refresh().whenComplete(() {
       dateTimeNow = DateTime.now();
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    if(_posts == null || _posts.length == 0){
+    if (_posts == null || _posts.length == 0) {
       return Container();
     }
     return PullToRefreshNotification(
@@ -50,14 +53,14 @@ class _SmileWallState extends State<SmileWall>{
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: PullToRefreshContainer(
-                    (PullToRefreshScrollNotificationInfo info) {
-                  return PullToRefreshHeader(info, dateTimeNow);
-                }),
+                (PullToRefreshScrollNotificationInfo info) {
+              return PullToRefreshHeader(info, dateTimeNow);
+            }),
           ),
           LoadingMoreSliverList<ImagePost>(
             SliverListConfig<ImagePost>(
               extendedListDelegate:
-              const SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
+                  const SliverWaterfallFlowDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
@@ -72,6 +75,7 @@ class _SmileWallState extends State<SmileWall>{
       ),
     );
   }
+
   Future<List<ImagePost>> _getSmileWallPosts() async {
     List<ImagePost> posts = [];
     var snap = await Firestore.instance
@@ -86,7 +90,7 @@ class _SmileWallState extends State<SmileWall>{
     });
   }
 
-  Widget buildItem(BuildContext context, ImagePost item, int index){
+  Widget buildItem(BuildContext context, ImagePost item, int index) {
     return item;
   }
 }

@@ -31,4 +31,15 @@ class FontUtil {
                       fontFamily: "Fontdiner Swanky", color: Colors.black, fontSize: 35)),
             ]));
   }
+
+  static RichText makeTitleByString(String title){
+    return RichText(
+        text: TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                  text: title,
+                  style: const TextStyle(
+                      fontFamily: "Fontdiner Swanky", color: Colors.deepOrange, fontSize:35)),
+            ]));
+  }
 }

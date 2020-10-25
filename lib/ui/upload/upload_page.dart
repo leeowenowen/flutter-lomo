@@ -7,12 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
-import 'main2.dart';
 import 'dart:io';
-import 'location.dart';
+import '../../common/utils/location_util.dart';
 import 'package:geocoder/geocoder.dart';
 
-import 'models/user.dart';
+import '../../models/user.dart';
 
 class Uploader extends StatefulWidget {
   _Uploader createState() => _Uploader();

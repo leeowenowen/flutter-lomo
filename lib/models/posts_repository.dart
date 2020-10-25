@@ -1,25 +1,22 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_photo_share/common/constants/constants.dart';
-import 'package:flutter_photo_share/image_post.dart';
-import 'package:http/http.dart';
-import 'package:http_client_helper/http_client_helper.dart';
+import 'package:flutter_photo_share/ui/widgets/image_post.dart';
 import 'package:loading_more_list_library/loading_more_list_library.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'tu_chong_source.dart';
 
 class PostRepository extends LoadingMoreBase<ImagePost> {
-  PostRepository({this.maxLength = 300, this.pageCount = 20, this.collection = Constants.COLLECTION_POSTS});
+  PostRepository(
+      {this.maxLength = 300,
+      this.pageCount = 20,
+      this.collection = Constants.COLLECTION_POSTS});
+
   int _pageIndex = 1;
   final int pageCount;
   bool _hasMore = true;
   bool forceRefresh = false;
   final String collection;
+
   @override
   bool get hasMore => (_hasMore && length < maxLength) || forceRefresh;
   final int maxLength;
@@ -35,13 +32,15 @@ class PostRepository extends LoadingMoreBase<ImagePost> {
     forceRefresh = false;
     return result;
   }
-   DocumentSnapshot lastDocument;
+
+  DocumentSnapshot lastDocument;
+
   Future<List<ImagePost>> _getSmileWallPosts() async {
     List<ImagePost> posts = [];
     var snap = await Firestore.instance
         .collection(Constants.COLLECTION_POSTS)
         .orderBy("timestamp", descending: true)
-    .limit(pageCount)
+        .limit(pageCount)
         .getDocuments();
     for (var doc in snap.documents) {
       lastDocument = doc;
@@ -55,7 +54,7 @@ class PostRepository extends LoadingMoreBase<ImagePost> {
     var snap = await Firestore.instance
         .collection(Constants.COLLECTION_POSTS)
         .orderBy("timestamp", descending: true)
-    .startAfterDocument(lastDocument)
+        .startAfterDocument(lastDocument)
         .limit(pageCount)
         .getDocuments();
     for (var doc in snap.documents) {
@@ -63,12 +62,13 @@ class PostRepository extends LoadingMoreBase<ImagePost> {
     }
     return posts;
   }
+
   _getFeed() async {
     print("Staring getFeed");
 
-    if(isEmpty){
-        return await _getSmileWallPosts();
-    }else{
+    if (isEmpty) {
+      return await _getSmileWallPosts();
+    } else {
       return await _getNextSmileWallPosts();
     }
     //
