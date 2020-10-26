@@ -20,13 +20,22 @@ class _LoginPageState extends State<LoginPage> {
       if (!logined) {
         return;
       }
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil(HomePage.ROUTE, (route) => false);
+      gotoMainPage();
     });
   }
 
+  void gotoMainPage(){
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(HomePage.ROUTE, (route) => false);
+  }
+
   void login() async {
-    await AccountService.ensureLoggedIn(context);
+    bool success = await AccountService.ensureLoggedIn(context);
+    if(!success){
+      //show error dialog here
+      return;
+    }
+    gotoMainPage();
   }
 
   @override

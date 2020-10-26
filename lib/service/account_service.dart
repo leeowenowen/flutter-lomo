@@ -41,7 +41,7 @@ class AccountService {
     _currentUserModel = null;
   }
 
-  static Future<Null> ensureLoggedIn(BuildContext context) async {
+  static Future<bool> ensureLoggedIn(BuildContext context) async {
     GoogleSignInAccount user = _googleSignIn.currentUser;
     if (user == null) {
       user = await _googleSignIn.signInSilently();
@@ -64,6 +64,8 @@ class AccountService {
       await _auth.signInWithCredential(credential);
       NotificationUtil.setUpNotifications();
     }
+    return _currentUserModel != null;
+
   }
 
   static Future<bool> silentLogin(BuildContext context) async {

@@ -7,7 +7,7 @@ class FontUtil {
         text: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                  text: 'Orange',
+                  text: 'Orang',
                   style: const TextStyle(
                       fontFamily: "Fontdiner Swanky", color: Colors.deepOrange, fontSize:35)),
               TextSpan(
@@ -22,7 +22,7 @@ class FontUtil {
         text: TextSpan(
             children: <TextSpan>[
               TextSpan(
-                  text: 'Orange',
+                  text: 'Orang',
                   style: const TextStyle(
                       fontFamily: "Fontdiner Swanky", color: Colors.deepOrange, fontSize:60)),
               TextSpan(

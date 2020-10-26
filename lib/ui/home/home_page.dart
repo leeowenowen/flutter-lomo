@@ -51,10 +51,15 @@ class _HomePageState extends State<HomePage> {
         ? LoginPage()
         : Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: FontUtil.makeTitleByString(_getPageTitle()),
         centerTitle: true,
         elevation: 0,
-      ),
+        bottom: new PreferredSize(
+            child: new Container(
+                color: Color(0xffdddddd),
+                height: 0.5,
+      ),),),
       body: Container(
         child: PageView(
           children: [
