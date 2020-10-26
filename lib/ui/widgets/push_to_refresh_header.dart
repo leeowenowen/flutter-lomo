@@ -96,7 +96,7 @@ class RefreshImage extends StatelessWidget {
   Widget build(BuildContext context) {
     const double imageSize = 40;
     return ExtendedImage.asset(
-      'assets/flutterCandies_grey.png',
+      'assets/logo.png',
       width: imageSize,
       height: imageSize,
       afterPaintImage: (Canvas canvas, Rect rect, ui.Image image, Paint paint) {

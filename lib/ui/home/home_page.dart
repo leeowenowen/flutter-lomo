@@ -81,29 +81,37 @@ class _HomePageState extends State<HomePage> {
           onPageChanged: onPageChanged,
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        child: Row(
-          children: [
-            Container(
-              child: Icon(Icons.home,
-                  color: (_page == 0) ? Colors.black : Colors.grey),
-            ),
-            Container(
-              child: Icon(Icons.home,
-                  color: (_page == 1) ? Colors.black : Colors.grey),
-            ),
-            Container(
-              child: Icon(Icons.home,
-                  color: (_page == 2) ? Colors.black : Colors.grey),
-            ),
-            Container(
-              child: Icon(Icons.home,
-                  color: (_page == 3) ? Colors.black : Colors.grey),
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: GestureDetector(
+      //   child: Row(
+      //     children: [
+      //       _buildTab(0, Icon(Icons.home,
+      //             color: (_page == 0) ? Colors.black : Colors.grey),
+      //       ),
+      //       _buildTab(1,Icon(Icons.home,
+      //             color: (_page == 1) ? Colors.black : Colors.grey),
+      //       ),
+      //       _buildTab(2, Icon(Icons.home,
+      //             color: (_page == 2) ? Colors.black : Colors.grey),
+      //       ),
+      //       _buildTab(3, Icon(Icons.home,
+      //             color: (_page == 3) ? Colors.black : Colors.grey),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
+  }
+
+  _buildTab(int index, Widget child){
+    return child;
+    // return GestureDetector(
+    //   onTap: (){
+    //     navigationTapped(index);
+    //   },
+    //     child:
+    // Container(
+    //     child:widget
+    // ));
   }
 
   void navigationTapped(int page) {

@@ -39,7 +39,7 @@ class FontUtil {
               TextSpan(
                   text: title,
                   style: const TextStyle(
-                      fontFamily: "Fontdiner Swanky", color: Colors.deepOrange, fontSize:35)),
+                      fontFamily: "Fontdiner Swanky", color: Colors.deepOrange, fontSize:25)),
             ]));
   }
 }

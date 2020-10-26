@@ -80,7 +80,7 @@ flutter:
         - asset: assets/fonts/FontdinerSwanky.ttf
   assets:
     - assets/
-    - assets/images/google_signin_button.png
+    - assets/images/
     - assets/flare/Like.flr
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -16,8 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Future<void> initState() {
     super.initState();
-    AccountService.silentLogin(context).then((value) => {
-    Navigator.of(context).pushNamedAndRemoveUntil(HomePage.ROUTE,(route) => false)
+    AccountService.silentLogin(context).then((logined) {
+      if (!logined) {
+        return;
+      }
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomePage.ROUTE, (route) => false);
     });
   }
 
@@ -28,15 +32,26 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     String photoTheWorld =
-    MyLocalizations.of(context).get('common.photo_the_world');
+        MyLocalizations.of(context).get('common.photo_the_world');
     return Scaffold(
       body: Container(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.only(top: 240.0),
+            padding: const EdgeInsets.only(top: 100.0),
             child: Column(
               children: <Widget>[
-                FontUtil.makeBrand(),
+                Stack(children: [
+                  Container(
+                    child: Image.asset('assets/logo.png', height: 300),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin:EdgeInsets.only(top: 220),
+                        child: FontUtil.makeBrand()),
+                      )
+                ]),
+
                 SizedBox(
                   height: 30,
                 ),
@@ -49,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 GestureDetector(
                   onTap: login,
                   child: Image.asset(
-                    "assets/images/google_signin_button.png",
+                    "assets/google_signin_button.png",
                     width: 225.0,
                   ),
                 )

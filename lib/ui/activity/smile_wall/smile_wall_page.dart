@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_photo_share/models/posts_repository.dart';
+import 'package:flutter_photo_share/ui/post_feed/posts_repository.dart';
 import 'package:flutter_photo_share/ui/widgets/image_post.dart';
 import 'package:flutter_photo_share/ui/widgets/push_to_refresh_header.dart';
 import 'package:loading_more_list/loading_more_list.dart';

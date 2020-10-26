@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_photo_share/models/posts_repository.dart';
+import 'package:flutter_photo_share/ui/post_feed/posts_repository.dart';
 import 'package:loading_more_list/loading_more_list.dart';
 import 'package:pull_to_refresh_notification/pull_to_refresh_notification.dart';
 
@@ -23,7 +23,6 @@ class _PostFeedPageState extends State<PostFeedPage> {
   @override
   void initState() {
     super.initState();
-    // _getSmileWallPosts();
     listSourceRepository.refresh().whenComplete(() {
       setState(() {
         dateTimeNow = DateTime.now();
@@ -83,12 +82,12 @@ class _PostFeedPageState extends State<PostFeedPage> {
 
   Widget buildItem(BuildContext context, ImagePost item, int index) {
     return Container(
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-          color: Colors.grey,
-          width: 2,
-        ))),
+        // decoration: BoxDecoration(
+        //     border: Border(
+        //         bottom: BorderSide(
+        //   color: Colors.grey,
+        //   width: 2,
+        // ))),
         child: item);
   }
 }
