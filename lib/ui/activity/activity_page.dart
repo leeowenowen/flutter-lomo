@@ -12,10 +12,10 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage> {
   final RandomColorUtil _randomColorUtil = RandomColorUtil();
   final activities = [
-    {'title': 'Take Smail Photo with People all over the world', 'desc': ''},
+    {'title': 'Take Smail Photo with People all over the world', 'desc': '1'},
     {'title': 'I want to see China Great Wall', 'desc': ''},
-    {'title': 'Take Smail Photo with People all over the world', 'desc': ''},
-    {'title': 'I want to see China Great Wall', 'desc': ''}
+    {'title': 'Take Smail Photo with People all over the world', 'desc': '1'},
+    {'title': 'I want to see China Great Wall', 'desc': '1'}
   ];
   Map<String, dynamic> redirectPageInfo = {};
 
@@ -32,7 +32,7 @@ class _ActivityPageState extends State<ActivityPage> {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(child: _swiper()),
-          SliverToBoxAdapter(child: SmileWallPage()),
+          // SliverToBoxAdapter(child: SmileWallPage()),
         ],
       ),
     );
@@ -40,9 +40,8 @@ class _ActivityPageState extends State<ActivityPage> {
 
   Widget _swiper() {
     return Container(
-      color: Colors.red,
       height: 130,
-      child: new Swiper(
+      child: Swiper(
         itemBuilder: (BuildContext context, int index) {
           return ColorTextBanner(
             activities[index]['title'],

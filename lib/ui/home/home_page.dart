@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/utils/font_util.dart';
 import 'package:flutter_photo_share/localization/my_l10n.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
 import 'package:flutter_photo_share/ui/account/login_page.dart';
 import 'package:flutter_photo_share/ui/activity/activity_page.dart';
+import 'package:flutter_photo_share/ui/widgets/fancy_bottom_navigation.dart';
 
 import '../../main.dart';
 import '../post_feed/post_feed_page.dart';
@@ -22,6 +25,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _page = 0;
   PageController _pageController;
+  StreamController<int> indexcontroller = StreamController<int>.broadcast();
 
   String _getPageTitle() {
     String key;
@@ -72,8 +76,6 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               child: Uploader(),
             ),
-            // Container(
-            //     color: Colors.white, child: CustomScrollviewDemo()),
             Container(
               color: Colors.white,
               child: ProfilePage(
@@ -86,42 +88,31 @@ class _HomePageState extends State<HomePage> {
           onPageChanged: onPageChanged,
         ),
       ),
-      // bottomNavigationBar: GestureDetector(
-      //   child: Row(
-      //     children: [
-      //       _buildTab(0, Icon(Icons.home,
-      //             color: (_page == 0) ? Colors.black : Colors.grey),
-      //       ),
-      //       _buildTab(1,Icon(Icons.home,
-      //             color: (_page == 1) ? Colors.black : Colors.grey),
-      //       ),
-      //       _buildTab(2, Icon(Icons.home,
-      //             color: (_page == 2) ? Colors.black : Colors.grey),
-      //       ),
-      //       _buildTab(3, Icon(Icons.home,
-      //             color: (_page == 3) ? Colors.black : Colors.grey),
-      //       ),
-      //     ],
-      //   ),
-      // ),
+      bottomNavigationBar:
+      StreamBuilder<Object>(
+          initialData: 0,
+          stream: indexcontroller.stream,
+          builder: (context, snapshot) {
+            int cIndex = snapshot.data;
+            return FancyBottomNavigation(
+              currentIndex: cIndex,
+              items: <FancyBottomNavigationItem>[
+                FancyBottomNavigationItem(
+                    icon: Icon(Icons.home), title: Text('Home')),
+                FancyBottomNavigationItem(
+                    icon: Icon(Icons.local_activity), title: Text('Activity')),
+                FancyBottomNavigationItem(
+                    icon: Icon(Icons.thumb_up), title: Text('Thank You')),
+                FancyBottomNavigationItem(
+                    icon: Icon(Icons.person), title: Text('Me')),
+              ],
+              onItemSelected: (int value) {
+                indexcontroller.add(value);
+                _pageController.jumpToPage(value);
+              },
+            );
+          }),
     );
-  }
-
-  _buildTab(int index, Widget child){
-    return child;
-    // return GestureDetector(
-    //   onTap: (){
-    //     navigationTapped(index);
-    //   },
-    //     child:
-    // Container(
-    //     child:widget
-    // ));
-  }
-
-  void navigationTapped(int page) {
-    //Animating Page
-    _pageController.jumpToPage(page);
   }
 
   void onPageChanged(int page) {
@@ -133,7 +124,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(initialPage: 0);
   }
 
   @override

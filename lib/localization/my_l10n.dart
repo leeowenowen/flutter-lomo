@@ -14,22 +14,22 @@ class MyLocalizations {
   static Map<String, Map<String, String>> _localizedValues = {
     'en': {
       'main.title': 'Orangda',
-      'smail_wall.title':'Smile Wall',
+      'smile_wall.title':'Smile Wall',
       'take_a_photo': 'Take a Photo',
       'select_images': 'Select Images',
       'share.title':'Share Photos',
-      'share.title':'Me',
+      'me.title':'Me',
       'common.photo_the_world':'Photo the World!',
 
 
     },
     'zh': {
       'main.title': 'Orangda',
-      'smail_wall.title':'Smile Wall',
+      'smile_wall.title':'Smile Wall',
       'take_a_photo': 'Take a Photo',
       'select_images': 'Select Images',
       'share.title':'Share Photos',
-      'share.title':'Me',
+      'me.title':'Me',
       'common.photo_the_world':'Photo the World!',
     }
   };
