@@ -17,6 +17,7 @@ class MyLocalizations {
       'smile_wall.title':'Smile Wall',
       'take_a_photo': 'Take a Photo',
       'select_images': 'Select Images',
+      'dummy.title':'Dummy',
       'share.title':'Share Photos',
       'me.title':'Me',
       'common.photo_the_world':'Photo the World!',
@@ -30,6 +31,7 @@ class MyLocalizations {
       'select_images': 'Select Images',
       'share.title':'Share Photos',
       'me.title':'Me',
+      'dummy.title':'Dummy',
       'common.photo_the_world':'Photo the World!',
     }
   };

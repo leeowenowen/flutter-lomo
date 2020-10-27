@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/utils/font_util.dart';
 import 'package:flutter_photo_share/localization/my_l10n.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
 import 'package:flutter_photo_share/ui/account/login_page.dart';
 import 'package:flutter_photo_share/ui/activity/activity_page.dart';
+import 'package:flutter_photo_share/ui/demo/variable_size_demo.dart';
 import 'package:flutter_photo_share/ui/widgets/fancy_bottom_navigation.dart';
 
 import '../../main.dart';
@@ -40,6 +42,9 @@ class _HomePageState extends State<HomePage> {
         key = 'share.title';
         break;
       case 3:
+        key = 'dummy.title';
+        break;
+      case 4:
         key = 'me.title';
         break;
       default:
@@ -78,6 +83,10 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               color: Colors.white,
+              child: VariableSizedDemo(),
+            ),
+            Container(
+              color: Colors.white,
               child: ProfilePage(
                 userId: AccountService.googleSignIn().currentUser.id,
               ),
@@ -88,31 +97,55 @@ class _HomePageState extends State<HomePage> {
           onPageChanged: onPageChanged,
         ),
       ),
-      bottomNavigationBar:
-      StreamBuilder<Object>(
-          initialData: 0,
-          stream: indexcontroller.stream,
-          builder: (context, snapshot) {
-            int cIndex = snapshot.data;
-            return FancyBottomNavigation(
-              currentIndex: cIndex,
-              items: <FancyBottomNavigationItem>[
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.home), title: Text('Home')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.local_activity), title: Text('Activity')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.thumb_up), title: Text('Thank You')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.person), title: Text('Me')),
-              ],
-              onItemSelected: (int value) {
-                indexcontroller.add(value);
-                _pageController.jumpToPage(value);
-              },
-            );
-          }),
+      bottomNavigationBar:_buildBottomBar(),
+
     );
+  }
+
+  Widget _buildBottomBar(){
+    return ConvexAppBar(
+      color: Colors.white,
+      backgroundColor: Colors.black,
+      height: 60,
+      items: [
+        TabItem(icon: Icons.home, title: 'Home'),
+        TabItem(icon: Icons.map, title: 'Discovery'),
+        TabItem(icon: Icons.add, title: 'Add'),
+        TabItem(icon: Icons.message, title: 'Message'),
+        TabItem(icon: Icons.people, title: 'Profile'),
+      ],
+      initialActiveIndex: 2,//optional, default as 0
+      onTap: (value){
+        indexcontroller.add(value);
+        _pageController.jumpToPage(value);
+      },
+    );
+  }
+
+  Widget _buildBottomBarV2(){
+    return       StreamBuilder<Object>(
+        initialData: 0,
+        stream: indexcontroller.stream,
+        builder: (context, snapshot) {
+          int cIndex = snapshot.data;
+          return FancyBottomNavigation(
+            currentIndex: cIndex,
+            items: <FancyBottomNavigationItem>[
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.home), title: Text('Home')),
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.local_activity), title: Text('Activity')),
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.thumb_up), title: Text('Thank You')),
+              FancyBottomNavigationItem(
+                  icon: Icon(Icons.person), title: Text('Me')),
+            ],
+            onItemSelected: (int value) {
+              indexcontroller.add(value);
+              _pageController.jumpToPage(value);
+            },
+          );
+        });
   }
 
   void onPageChanged(int page) {

@@ -44,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
         MyLocalizations.of(context).get('common.photo_the_world');
     return Scaffold(
       body: Container(
+        color:Colors.black,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 100.0),
@@ -66,8 +67,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Text(photoTheWorld,
                     style: const TextStyle(
-                        fontFamily: "Fontdiner Swanky",
-                        color: Colors.black,
+                        // fontFamily: "Fontdiner Swanky",
+                        color: Colors.white,
                         fontSize: 20)),
                 Padding(padding: const EdgeInsets.only(bottom: 100.0)),
                 GestureDetector(

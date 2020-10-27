@@ -38,7 +38,7 @@ class PostRepository extends LoadingMoreBase<ImagePost> {
   Future<List<ImagePost>> _getSmileWallPosts() async {
     List<ImagePost> posts = [];
     var snap = await Firestore.instance
-        .collection(Constants.COLLECTION_POSTS)
+        .collection(collection)
         .orderBy("timestamp", descending: true)
         .limit(pageCount)
         .getDocuments();
@@ -52,7 +52,7 @@ class PostRepository extends LoadingMoreBase<ImagePost> {
   Future<List<ImagePost>> _getNextSmileWallPosts() async {
     List<ImagePost> posts = [];
     var snap = await Firestore.instance
-        .collection(Constants.COLLECTION_POSTS)
+        .collection(collection)
         .orderBy("timestamp", descending: true)
         .startAfterDocument(lastDocument)
         .limit(pageCount)
