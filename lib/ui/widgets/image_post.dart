@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/constants/constants.dart';
+import 'package:flutter_photo_share/common/utils/time_util.dart';
 import 'package:flutter_photo_share/models/user.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
 import 'package:flutter_photo_share/ui/account/profile_page.dart';
@@ -19,9 +20,12 @@ class ImagePost extends StatefulWidget {
       this.description,
       this.likes,
       this.postId,
-      this.ownerId});
+      this.ownerId,
+      this.postTime});
 
   factory ImagePost.fromDocument(DocumentSnapshot document) {
+    Timestamp timestamp = document['timestamp'];
+    int timestampmillSeconds = timestamp.millisecondsSinceEpoch;
     return ImagePost(
       username: document['username'],
       location: document['location'],
@@ -30,6 +34,7 @@ class ImagePost extends StatefulWidget {
       description: document['description'],
       postId: document.documentID,
       ownerId: document['ownerId'],
+      postTime: formatTimestamp(timestampmillSeconds)
     );
   }
 
@@ -42,6 +47,7 @@ class ImagePost extends StatefulWidget {
       description: data['description'],
       ownerId: data['ownerId'],
       postId: data['postId'],
+      postTime: data['timestamp'],
     );
   }
 
@@ -68,6 +74,7 @@ class ImagePost extends StatefulWidget {
   final likes;
   final String postId;
   final String ownerId;
+  final String postTime;
 
   _ImagePost createState() => _ImagePost(
         mediaUrl: this.mediaUrl,
@@ -78,6 +85,7 @@ class ImagePost extends StatefulWidget {
         likeCount: getLikeCount(this.likes),
         ownerId: this.ownerId,
         postId: this.postId,
+    postTime: this.postTime,
       );
 }
 
@@ -91,6 +99,7 @@ class _ImagePost extends State<ImagePost> {
   final String postId;
   bool liked;
   final String ownerId;
+  final String postTime;
 
   bool showHeart = false;
 
@@ -109,7 +118,8 @@ class _ImagePost extends State<ImagePost> {
       this.likes,
       this.postId,
       this.likeCount,
-      this.ownerId});
+      this.ownerId,
+      this.postTime});
 
   GestureDetector buildLikeIcon() {
     Color color;
@@ -192,7 +202,15 @@ class _ImagePost extends State<ImagePost> {
                     });
                   },
                 ),
-                subtitle: Text(this.location),
+                subtitle: Row(children:[IconTheme(
+                  data: IconThemeData(
+                      size: 15,
+                      color: Colors.blue),
+                  child: Icon(Icons.location_on),
+                ),
+
+                Text(this.location),]
+                ),
                 trailing: const Icon(Icons.more_vert),
               ),
             );
@@ -219,6 +237,20 @@ class _ImagePost extends State<ImagePost> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         buildPostHeader(ownerId: ownerId),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+                margin: const EdgeInsets.only(left: 20.0,right: 20, bottom: 5),
+                child: Text(
+                  description,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  )
+                )),
+          ],
+        ),
         buildLikeableImage(),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -238,6 +270,15 @@ class _ImagePost extends State<ImagePost> {
                       ownerId: ownerId,
                       mediaUrl: mediaUrl);
                 }),
+            Expanded(child:
+            Container(
+              margin:EdgeInsets.only(right: 20),
+                child:Text(postTime,
+                    textAlign: TextAlign.right,
+                    style:TextStyle(
+                  color:Colors.grey,
+                  fontSize:12
+                ))))
           ],
         ),
         Row(
@@ -246,23 +287,14 @@ class _ImagePost extends State<ImagePost> {
               margin: const EdgeInsets.only(left: 20.0),
               child: Text(
                 "$likeCount likes",
-                style: boldStyle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color:Colors.grey,
+                ),
               ),
             )
           ],
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-                margin: const EdgeInsets.only(left: 20.0),
-                child: Text(
-                  "$username ",
-                  style: boldStyle,
-                )),
-            Expanded(child: Text(description)),
-          ],
-        )
       ],
     );
   }

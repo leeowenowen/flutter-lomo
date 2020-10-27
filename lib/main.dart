@@ -50,8 +50,8 @@ class Orangda extends StatelessWidget {
         const Locale('en', 'US'),
         const Locale('zh', 'CN'),
       ],
-       theme: AppTheme.theme,
-        darkTheme: AppTheme.theme,
+       // theme: AppTheme.theme,
+       //  darkTheme: AppTheme.theme,
       // home: HomePage(title: 'Orangda'),
     );
   }

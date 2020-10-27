@@ -7,7 +7,7 @@ class AppTheme {
     // Define the default brightness and colors.
 
     brightness: Brightness.light,
-    primaryColor: Colors.black,
+    primaryColor: Colors.white,
     accentColor: Colors.black87,
     colorScheme: ColorScheme.light(primary: Colors.white),
 

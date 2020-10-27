@@ -32,7 +32,7 @@ class _ActivityPageState extends State<ActivityPage> {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(child: _swiper()),
-          // SliverToBoxAdapter(child: SmileWallPage()),
+          SliverToBoxAdapter(child: SmileWallPage()),
         ],
       ),
     );
