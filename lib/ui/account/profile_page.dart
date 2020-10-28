@@ -318,14 +318,6 @@ class _ProfilePage extends State<ProfilePage>
           }
 
           return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  user.username,
-                  style: const TextStyle(
-                      fontFamily: "Fontdiner Swanky", color: Colors.black, fontSize: 20),
-                ),
-                backgroundColor: Colors.white,
-              ),
               body: Container(
                 child:ListView(
                 children: <Widget>[

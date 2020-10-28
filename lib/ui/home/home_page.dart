@@ -23,7 +23,9 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
+enum TabType{
+  FEED, ACTIVITY, ADD, DUMMY, ME
+}
 class _HomePageState extends State<HomePage> {
   int _page = 0;
   PageController _pageController;
@@ -104,9 +106,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildBottomBar(){
     return ConvexAppBar(
-      color: Colors.white,
-      backgroundColor: Colors.black,
-      height: 60,
+      color: Colors.black,
+      backgroundColor: Colors.white,
+      activeColor:Colors.orange,
+      height: 50,
+      top:-20,
       items: [
         TabItem(icon: Icons.home, title: 'Home'),
         TabItem(icon: Icons.map, title: 'Discovery'),
@@ -114,7 +118,7 @@ class _HomePageState extends State<HomePage> {
         TabItem(icon: Icons.message, title: 'Message'),
         TabItem(icon: Icons.people, title: 'Profile'),
       ],
-      initialActiveIndex: 2,//optional, default as 0
+      initialActiveIndex: 0,//optional, default as 0
       onTap: (value){
         indexcontroller.add(value);
         _pageController.jumpToPage(value);
@@ -157,12 +161,24 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController(initialPage: _page);
   }
 
   @override
   void dispose() {
     super.dispose();
     _pageController.dispose();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if (ModalRoute.of(context).settings.arguments != null) {
+      Map<String,Object> args = ModalRoute.of(context).settings.arguments;
+      TabType specifyTab = args['tab'];
+      if (specifyTab != null)
+        setState(() {
+          _page = specifyTab.index;
+        });
+    }
   }
 }

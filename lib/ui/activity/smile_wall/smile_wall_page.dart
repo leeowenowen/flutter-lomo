@@ -24,7 +24,7 @@ class _SmileWallPageState extends State<SmileWallPage> {
   @override
   void initState() {
     super.initState();
-    _getSmileWallPosts();
+   // _getSmileWallPosts();
   }
 
   @override
@@ -41,9 +41,9 @@ class _SmileWallPageState extends State<SmileWallPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_posts == null || _posts.length == 0) {
-      return Container();
-    }
+    // if (_posts == null || _posts.length == 0) {
+    //   return Container();
+    // }
     return PullToRefreshNotification(
       pullBackOnRefresh: false,
       maxDragOffset: maxDragOffset,
@@ -76,19 +76,19 @@ class _SmileWallPageState extends State<SmileWallPage> {
     );
   }
 
-  Future<List<ImagePost>> _getSmileWallPosts() async {
-    List<ImagePost> posts = [];
-    var snap = await Firestore.instance
-        .collection(Constants.COLLECTION_POSTS)
-        .orderBy("timestamp")
-        .getDocuments();
-    for (var doc in snap.documents) {
-      posts.add(ImagePost.fromDocument(doc));
-    }
-    setState(() {
-      _posts = posts.reversed.toList();
-    });
-  }
+  // Future<List<ImagePost>> _getSmileWallPosts() async {
+  //   List<ImagePost> posts = [];
+  //   var snap = await Firestore.instance
+  //       .collection(Constants.COLLECTION_POSTS)
+  //       .orderBy("timestamp")
+  //       .getDocuments();
+  //   for (var doc in snap.documents) {
+  //     posts.add(ImagePost.fromDocument(doc));
+  //   }
+  //   setState(() {
+  //     _posts = posts.reversed.toList();
+  //   });
+  // }
 
   Widget buildItem(BuildContext context, ImagePost item, int index) {
     return item;

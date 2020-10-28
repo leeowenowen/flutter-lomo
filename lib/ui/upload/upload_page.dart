@@ -1,16 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/constants/constants.dart';
 import 'package:flutter_photo_share/service/account_service.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:async';
-import 'dart:io';
-import '../../common/utils/location_util.dart';
-import 'package:geocoder/geocoder.dart';
 
+import '../../common/utils/location_util.dart';
 import '../../models/user.dart';
 
 class Uploader extends StatefulWidget {
@@ -19,6 +20,7 @@ class Uploader extends StatefulWidget {
 
 class _Uploader extends State<Uploader> {
   File file;
+
   //Strings required to save address
   Address address;
 
@@ -27,6 +29,11 @@ class _Uploader extends State<Uploader> {
   TextEditingController locationController = TextEditingController();
 
   bool uploading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   initState() {
@@ -40,6 +47,9 @@ class _Uploader extends State<Uploader> {
   //method to get Location and save into variables
   initPlatformState() async {
     Address first = await getUserLocation();
+    if (!mounted) {
+      return;
+    }
     setState(() {
       address = first;
     });
@@ -148,8 +158,11 @@ class _Uploader extends State<Uploader> {
                 child: const Text('Take a photo'),
                 onPressed: () async {
                   Navigator.pop(context);
-                  PickedFile pickedFile =
-                      await _picker.getImage(source: ImageSource.camera, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
+                  PickedFile pickedFile = await _picker.getImage(
+                      source: ImageSource.camera,
+                      maxWidth: 1920,
+                      maxHeight: 1200,
+                      imageQuality: 80);
                   setState(() {
                     file = File(pickedFile.path);
                   });
@@ -158,8 +171,11 @@ class _Uploader extends State<Uploader> {
                 child: const Text('Choose from Gallery'),
                 onPressed: () async {
                   Navigator.of(context).pop();
-                  PickedFile pickedFile =
-                      await _picker.getImage(source: ImageSource.gallery, maxWidth: 1920, maxHeight: 1200, imageQuality: 80);
+                  PickedFile pickedFile = await _picker.getImage(
+                      source: ImageSource.gallery,
+                      maxWidth: 1920,
+                      maxHeight: 1200,
+                      imageQuality: 80);
                   setState(() {
                     file = File(pickedFile.path);
                     ;
@@ -187,11 +203,19 @@ class _Uploader extends State<Uploader> {
     setState(() {
       uploading = true;
     });
+
     uploadImage(file).then((String data) {
+      dynamic args = ModalRoute.of(context).settings.arguments;
+      String collection = Constants.COLLECTION_POSTS;
+      if (args['collection'] != null) {
+        collection = args['collection'];
+      }
       postToFireStore(
-          mediaUrl: data,
-          description: descriptionController.text,
-          location: locationController.text);
+        mediaUrl: data,
+        description: descriptionController.text,
+        location: locationController.text,
+        collection: collection,
+      );
     }).then((_) {
       setState(() {
         file = null;
@@ -206,6 +230,7 @@ class PostForm extends StatelessWidget {
   final TextEditingController descriptionController;
   final TextEditingController locationController;
   final bool loading;
+
   PostForm(
       {this.imageFile,
       this.descriptionController,
@@ -223,7 +248,8 @@ class PostForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(AccountService.currentUser().photoUrl),
+              backgroundImage:
+                  NetworkImage(AccountService.currentUser().photoUrl),
             ),
             Container(
               width: 250.0,
@@ -278,8 +304,11 @@ Future<String> uploadImage(var imageFile) async {
 }
 
 void postToFireStore(
-    {String mediaUrl, String location, String description}) async {
-  var reference = Firestore.instance.collection(Constants.COLLECTION_POSTS);
+    {String mediaUrl,
+    String location,
+    String description,
+    String collection}) async {
+  var reference = Firestore.instance.collection(collection);
   User currentUserModel = AccountService.currentUser();
   GoogleSignIn googleSignIn = AccountService.googleSignIn();
   reference.add({

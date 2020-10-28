@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_photo_share/common/utils/RandomColorUtil.dart';
 import 'package:flutter_photo_share/ui/activity/smile_wall/smile_wall_page.dart';
+import 'package:flutter_photo_share/ui/home/home_page.dart';
 import 'package:flutter_photo_share/ui/widgets/color_text_banner.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
@@ -32,7 +33,7 @@ class _ActivityPageState extends State<ActivityPage> {
         physics: BouncingScrollPhysics(),
         slivers: <Widget>[
           SliverToBoxAdapter(child: _swiper()),
-          SliverToBoxAdapter(child: SmileWallPage()),
+          // SliverToBoxAdapter(child: SmileWallPage()),
         ],
       ),
     );
@@ -43,11 +44,17 @@ class _ActivityPageState extends State<ActivityPage> {
       height: 130,
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
-          return ColorTextBanner(
+          return GestureDetector(
+            onTap: (){
+              Navigator.pushNamedAndRemoveUntil(context, HomePage.ROUTE, (route) => false, arguments:{
+                'collection':'smile_wall'
+              });
+            },
+              child:ColorTextBanner(
             activities[index]['title'],
             desc: activities[index]['desc'],
             bgColor: _randomColorUtil.getRandomColor(index),
-          );
+          ));
         },
         itemCount: activities.length,
         viewportFraction: 1,
